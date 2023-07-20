@@ -1,0 +1,26 @@
+version: '3'
+services:
+  producer:
+    build:
+      context: ./producer
+    ports:
+      - 3000:3000
+    depends_on:
+      - rabbitmq
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - RABBIT_HOST=rabbitmq
+  consumer:
+    build:
+      context: ./consumer
+    depends_on:
+      - rabbitmq
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - RABBIT_HOST=rabbitmq
+  rabbitmq:
+    image: rabbitmq:3-management
+  redis:
+    image: redis:7.0.12
